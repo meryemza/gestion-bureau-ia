@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-[#070E2A] text-white min-h-screen">
+    <div class="bg-[#070E2A] text-white flex h-screen">
        <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 space-y-6">
-        <h2 class="text-2xl font-bold">Employé</h2>
+       <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col h-screen">
+
+        <h2 class="text-3xl font-bold">Employé</h2>
         <nav class="space-y-4">
             <a href="#" class="block font-semibold hover:underline">Tableau de bord</a>
             <a href="#" class="block font-semibold hover:underline">Projets</a>
