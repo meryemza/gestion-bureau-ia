@@ -21,7 +21,7 @@
         <option value="admin">Admin</option>
         <option value="rh">RH</option>
         <option value="comptable">Comptable</option>
-        <option value="employe" selected>Employé</option>
+        <option value="employe">Employé</option>
     </select>
 </div>
 

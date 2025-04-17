@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->string('role')->default('employe'); // القيم الممكنة: admin, rh, comptable, employe
-
+            $table->string('role'); // Retirer la valeur par défaut ici
         });
     }
 

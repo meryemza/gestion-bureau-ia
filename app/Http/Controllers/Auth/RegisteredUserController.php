@@ -29,27 +29,43 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-{
-    // ✅ التحقق من جميع الحقول، بما فيهم "role"
-    $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        'role' => ['required', 'string', 'in:admin,rh,comptable,employe'],
-    ]);
-
-    // ✅ إنشاء المستخدم مع الدور
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role, // أضفنا الدور هنا ✅
-    ]);
-
-    event(new Registered($user));
-
-    Auth::login($user);
-
-    return redirect(RouteServiceProvider::HOME);
-}
+    {
+        // 🔴 Supprimer cette ligne de test une fois que tout fonctionne
+        // dd($request->all());
+    
+        // ✅ Validation des données
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:admin,rh,comptable,employe'],
+        ]);
+    
+        // ✅ Création de l'utilisateur
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
+        ]);
+    
+        event(new Registered($user));
+    
+        Auth::login($user);
+    
+        // ✅ Redirection personnalisée par rôle
+        return redirect($this->redirectByRole($user->role));
+    }
+    
+    private function redirectByRole($role)
+    {
+        return match ($role) {
+            'admin' => '/admin/dashboard',
+            'rh' => '/rh/dashboard',
+            'comptable' => '/comptable/dashboard',
+            'employe' => '/employe/dashboard',
+            default => '/',
+        };
+    }
+    
 }
