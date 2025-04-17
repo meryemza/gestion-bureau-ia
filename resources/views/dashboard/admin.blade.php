@@ -1,8 +1,59 @@
-<!-- resources/views/dashboard/admin.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1>Bienvenue Admin !</h1>
-    </div>
+<div class="bg-[#070E2A] text-white flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col h-screen">
+        <h2 class="text-3xl font-bold mb-6">Admin</h2>
+        <nav class="space-y-5 font-semibold">
+        <a href="#" class="block hover:underline">Dépenses</a>
+    <a href="#" class="block hover:underline">Services & Tarifs</a>
+    <a href="#" class="block hover:underline">Factures</a>
+    <a href="#" class="block hover:underline">Membres</a>
+    <a href="#" class="block hover:underline">Salaires</a>
+    <a href="#" class="block hover:underline">Congés</a>
+    <a href="#" class="block hover:underline">Projets</a>
+    <a href="#" class="block hover:underline">Clients</a>
+    <a href="#" class="block hover:underline">Statistiques</a>
+
+            <form method="POST" action="{{ route('logout') }}" class="pt-4">
+                @csrf
+               <!-- <button type="submit" class="text-red-600 hover:underline">Déconnexion</button>-->
+            </form>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-10 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Bienvenue, {{ Auth::user()->name }}</h1>
+            <p class="text-sm text-gray-300">Dernière connexion : {{ now()->format('d M Y à H\hi') }}</p>
+        </div>
+
+        <!-- Vue d’ensemble dynamique -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-2">Revenus ce mois</h3>
+                <p class="text-2xl text-[#FBD9FA] font-bold">12,500 DH</p>
+            </div>
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-2">Dépenses ce mois</h3>
+                <p class="text-2xl text-[#FBD9FA] font-bold">5,200 DH</p>
+            </div>
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-2">Projets actifs</h3>
+                <p class="text-2xl text-[#FBD9FA] font-bold">7</p>
+            </div>
+        </div>
+
+        <!-- Graphique exemple (à remplacer plus tard par Chart.js / Livewire) -->
+        <div class="mt-10 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+            <h3 class="text-xl font-semibold mb-4">Évolution des revenus</h3>
+            <div class="h-48 bg-gray-600 rounded-xl flex items-center justify-center text-gray-300 italic">
+                Graphique ici (à intégrer)
+            </div>
+        </div>
+    </main>
+</div>
 @endsection
+

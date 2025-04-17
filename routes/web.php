@@ -61,5 +61,6 @@ Route::post('employe/conges/store', [CongeController::class, 'store'])->name('em
 
 
 
+
 require __DIR__.'/auth.php';
 
