@@ -15,6 +15,15 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        <div>
+    <label for="role">Role</label>
+    <select name="role" id="role" required>
+        <option value="admin">Admin</option>
+        <option value="rh">RH</option>
+        <option value="comptable">Comptable</option>
+        <option value="employe" selected>Employé</option>
+    </select>
+</div>
 
         <!-- Password -->
         <div class="mt-4">
@@ -48,5 +57,6 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
+
     </form>
 </x-guest-layout>
