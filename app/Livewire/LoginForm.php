@@ -22,9 +22,11 @@ class LoginForm extends Component
         $this->validate();
 
         if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            return redirect()->route('dashboard');
+            // Redirection intelligente vers le bon dashboard selon le rôle
+            return redirect('/redirect-role');
         }
 
+        // Si la connexion échoue
         throw ValidationException::withMessages([
             'email' => ['Les informations d\'identification sont incorrectes.'],
         ]);
