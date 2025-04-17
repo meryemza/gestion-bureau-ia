@@ -7,6 +7,7 @@ use App\Http\Controllers\ComptableController;
 use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\UserController; // Ajouté pour le UserController
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CongeController;
 
 /*
 |---------------------------------------------------------------------------
@@ -55,6 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/comptable', [ComptableController::class, 'index'])->name('dashboard.comptable');
     Route::get('/dashboard/employe', [EmployeController::class, 'index'])->name('dashboard.employe');
 });
+Route::get('employe/conges/demande', [CongeController::class, 'create'])->name('employe.conges.demande');
+Route::post('employe/conges/store', [CongeController::class, 'store'])->name('employe.conges.store');
+
 
 
 require __DIR__.'/auth.php';
