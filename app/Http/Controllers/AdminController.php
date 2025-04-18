@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class AdminController extends Controller
 {
     /**
-     * Affiche le dashboard admin avec les statistiques et la liste des congés.
+     * Affiche le dashboard admin avec les statistiques et la liste des congés en attente.
      */
     public function index()
     {
@@ -38,25 +38,28 @@ class AdminController extends Controller
             $data[] = $depense->total;
         }
 
-        // Récupérer les congés avec les infos de l'employé
-        $conges = Conge::with('user')->latest()->get();
+        // Récupérer uniquement les congés en attente avec les infos de l'employé
+        $conges = Conge::with('user')
+            ->where('statut', 'En attente')
+            ->latest()
+            ->get();
 
         // Retourner la vue avec les données
         return view('dashboard.admin', [
-            'stats' => $stats,    // Statistiques générales
-            'labels' => $labels,  // Labels du graphique (mois)
-            'data' => $data,      // Données du graphique (totaux des dépenses)
-            'conges' => $conges   // Liste des congés
+            'stats' => $stats,
+            'labels' => $labels,
+            'data' => $data,
+            'conges' => $conges
         ]);
     }
 
     /**
-     * Affiche la liste des congés avec les options pour les accepter ou les refuser.
+     * Affiche la liste complète des congés (acceptés, refusés, en attente).
      */
     public function showConges()
     {
         // Récupérer tous les congés avec les informations nécessaires
-        $conges = Conge::all();
+        $conges = Conge::with('user')->latest()->get();
 
         // Retourner la vue avec la liste des congés
         return view('admin.conges', compact('conges'));
@@ -67,17 +70,14 @@ class AdminController extends Controller
      */
     public function accepterConge($id)
     {
-        // Recherche le congé par son ID
         $conge = Conge::find($id);
 
         if ($conge) {
-            // Modifie le statut du congé à "Accepté"
             $conge->statut = 'Accepté';
-            $conge->save(); // Sauvegarde les changements dans la base de données
+            $conge->save();
         }
 
-        // Redirige l'admin avec un message de succès
-        return redirect()->route('admin.conges')->with('success', 'Congé accepté');
+        return redirect()->back()->with('success', 'Le congé a été accepté avec succès.');
     }
 
     /**
@@ -85,17 +85,13 @@ class AdminController extends Controller
      */
     public function refuserConge($id)
     {
-        // Recherche le congé par son ID
         $conge = Conge::find($id);
 
         if ($conge) {
-            // Modifie le statut du congé à "Refusé"
             $conge->statut = 'Refusé';
-            $conge->save(); // Sauvegarde les changements dans la base de données
+            $conge->save();
         }
 
-        // Redirige l'admin avec un message d'erreur
-        return redirect()->route('admin.conges')->with('error', 'Congé refusé');
+        return redirect()->back()->with('error', 'Le congé a été refusé.');
     }
 }
-

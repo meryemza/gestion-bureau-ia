@@ -7,11 +7,12 @@
 
         <h2 class="text-3xl font-bold">Employé</h2>
         <nav class="space-y-4">
-            <a href="#" class="block font-semibold hover:underline">Tableau de bord</a>
             <a href="#" class="block font-semibold hover:underline">Projets</a>
             <a href="#" class="block font-semibold hover:underline">Salaire / Factures</a>
             <a href="#" class="block font-semibold hover:underline">Messagerie</a>
             <a href="#" class="block font-semibold hover:underline">Mon Profil</a>
+            <a href="{{ route('employe.mes_conges') }}" class="block font-semibold hover:underline">Statut de mes demandes</a>
+
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <!--<button type="submit" class="block font-semibold hover:underline text-red-600">
@@ -34,10 +35,10 @@
                     <p class="text-sm text-gray-300">Voir les documents à lire ou signer</p>
                 </div>
 
-                <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <!--<div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-semibold mb-2">Planning</h3>
                     <p class="text-sm text-gray-300">Consultez votre emploi du temps</p>
-                </div>
+                </div>-->
 
                 <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-semibold mb-2">Fiches de paie</h3>
@@ -49,15 +50,15 @@
                     <p class="text-sm text-gray-300">Voir les tâches attribuées</p>
                 </div>
 
-                <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                 <!--<div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-semibold mb-2">Notifications</h3>
                     <p class="text-sm text-gray-300">Derniers messages et alertes</p>
-                </div>
+                </div>-->
 
-                <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <!--<div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
                     <h3 class="text-xl font-semibold mb-2">Mon Profil</h3>
                     <p class="text-sm text-gray-300">Modifier vos informations</p>
-                </div>
+                </div>-->
 
                 <!-- Bouton Demande de Congé -->
                 <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
@@ -65,6 +66,7 @@
                     <p class="text-sm text-gray-300">Soumettre une demande de congé</p>
                     <a href="{{ route('employe.conges.demande') }}" class="inline-block mt-4 px-4 py-2 bg-gradient-to-r from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] rounded-xl text-center font-semibold">Faire une demande</a>
                 </div>
+                
             </div>
         </main>
     </div>

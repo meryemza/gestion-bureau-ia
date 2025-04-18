@@ -63,8 +63,12 @@ Route::get('/admin/conges', [AdminController::class, 'showConges'])->name('admin
 Route::patch('/admin/conge/accepter/{id}', [AdminController::class, 'accepterConge'])->name('admin.accepterConge');
 Route::patch('/admin/conge/refuser/{id}', [AdminController::class, 'refuserConge'])->name('admin.refuserConge');
 Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-
-
-
+// Route pour afficher les demandes de congé de l'employé
+Route::middleware(['auth'])->get('/mes-conges', [EmployeController::class, 'mesConges'])->name('employe.mes_conges');
+Route::middleware(['auth', 'role:rh'])->group(function () {
+    Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh.dashboard');
+    Route::get('/conges', [CongesController::class, 'index']);
+});
 require __DIR__.'/auth.php';
+
 
