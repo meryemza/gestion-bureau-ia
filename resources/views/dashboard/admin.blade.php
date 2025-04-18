@@ -12,7 +12,8 @@
             <a href="#" class="block hover:underline">Membres</a>
             <a href="#" class="block hover:underline">Salaires</a>
             <a href="{{ route('admin.conges') }}" class="block hover:underline">Congés</a>
-            <a href="#" class="block hover:underline">Projets</a>
+            <a href="{{ route('admin.projets') }}" class="block hover:underline">Projets</a>
+
             <a href="#" class="block hover:underline">Clients</a>
             <a href="#" class="block hover:underline">Statistiques</a>
 

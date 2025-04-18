@@ -8,6 +8,8 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\UserController; // Ajouté pour le UserController
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CongeController;
+use App\Http\Controllers\Admin\ProjetController;
+use App\Http\Controllers\ProjectController;
 
 /*
 |---------------------------------------------------------------------------
@@ -69,6 +71,15 @@ Route::middleware(['auth', 'role:rh'])->group(function () {
     Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh.dashboard');
     Route::get('/conges', [CongesController::class, 'index']);
 });
+Route::get('/admin/projets', [ProjetController::class, 'index'])->name('admin.projets');
+// Route::middleware(['auth', 'admin'])->get('/admin/projets', [ProjetController::class, 'index'])->name('admin.projets');
+
+
+Route::get('/projets', [ProjetController::class, 'index'])->name('admin.projets'); // Liste des projets
+Route::get('/projets/create', [ProjetController::class, 'create'])->name('admin.projets.create'); // Formulaire de création
+Route::post('/projets', [ProjetController::class, 'store'])->name('admin.projets.store'); // Enregistrement d'un projet
+Route::get('/projets/{id}/edit', [ProjetController::class, 'edit'])->name('admin.projets.edit'); // Formulaire de modification
+Route::put('/projets/{id}', [ProjetController::class, 'update'])->name('admin.projets.update'); // Mise à jour du projet
+Route::delete('/projets/{id}', [ProjetController::class, 'destroy'])->name('admin.projets.destroy'); // Suppression du projet
+
 require __DIR__.'/auth.php';
-
-
