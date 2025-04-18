@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-[#070E2A] text-white flex h-screen">
+<div class="bg-[#070E2A] text-white flex min-h-screen">
     <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col h-screen">
+    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col">
         <h2 class="text-3xl font-bold mb-6">Admin</h2>
         <nav class="space-y-5 font-semibold">
             <a href="#" class="block hover:underline">Dépenses</a>
@@ -11,7 +11,7 @@
             <a href="#" class="block hover:underline">Factures</a>
             <a href="#" class="block hover:underline">Membres</a>
             <a href="#" class="block hover:underline">Salaires</a>
-            <a href="#" class="block hover:underline">Congés</a>
+            <a href="{{ route('admin.conges') }}" class="block hover:underline">Congés</a> <!-- Lien vers la page des congés -->
             <a href="#" class="block hover:underline">Projets</a>
             <a href="#" class="block hover:underline">Clients</a>
             <a href="#" class="block hover:underline">Statistiques</a>
@@ -30,7 +30,7 @@
             <p class="text-sm text-gray-300">Dernière connexion : {{ now()->format('d M Y à H\hi') }}</p>
         </div>
 
-        <!-- Vue d’ensemble dynamique -->
+        <!-- Statistiques -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
                 <h3 class="text-xl font-semibold mb-2">Revenus ce mois</h3>
@@ -54,17 +54,17 @@
     </main>
 </div>
 
-<!-- Chart.js CDN -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('depenseChart').getContext('2d');
     const depenseChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: @json($labels),  // Mois (ex: Janvier, Février...)
+            labels: @json($labels),
             datasets: [{
                 label: 'Dépenses (MAD)',
-                data: @json($data),  // Montants des dépenses par mois
+                data: @json($data),
                 fill: true,
                 backgroundColor: 'rgba(252, 182, 255, 0.2)',
                 borderColor: '#AC72A1',
@@ -91,3 +91,4 @@
     });
 </script>
 @endsection
+

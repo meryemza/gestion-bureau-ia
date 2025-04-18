@@ -58,7 +58,11 @@ Route::middleware(['auth'])->group(function () {
 });
 Route::get('employe/conges/demande', [CongeController::class, 'create'])->name('employe.conges.demande');
 Route::post('employe/conges/store', [CongeController::class, 'store'])->name('employe.conges.store');
-
+// Route pour la page des congés
+Route::get('/admin/conges', [AdminController::class, 'showConges'])->name('admin.conges')->middleware(['auth', 'is_admin']);
+Route::patch('/admin/conge/accepter/{id}', [AdminController::class, 'accepterConge'])->name('admin.accepterConge');
+Route::patch('/admin/conge/refuser/{id}', [AdminController::class, 'refuserConge'])->name('admin.refuserConge');
+Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 
 
 
