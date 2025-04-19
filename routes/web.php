@@ -8,6 +8,8 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\UserController; // Ajouté pour le UserController
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CongeController;
+use App\Http\Controllers\SalaireController;
+use App\Http\Controllers\ProjectController;
 
 /*
 |---------------------------------------------------------------------------
@@ -64,7 +66,14 @@ Route::patch('/admin/conge/accepter/{id}', [AdminController::class, 'accepterCon
 Route::patch('/admin/conge/refuser/{id}', [AdminController::class, 'refuserConge'])->name('admin.refuserConge');
 Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 
-
+Route::middleware(['auth', 'role:rh'])->group(function () {
+    Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh.dashboard');
+    Route::get('/conges', [CongesController::class, 'index'])->name('conges.index');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
+Route::get('/salaires', [SalaireController::class, 'index'])->name('salaire.index');
+Route::resource('projects', ProjectController::class);
+});
 
 require __DIR__.'/auth.php';
 

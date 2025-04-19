@@ -2,35 +2,28 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Tableau de bord</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {{-- Inclusion du CSS et JS via Vite --}}
+    <title>Dashboard RH</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    @livewireStyles
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-[#070E2A] text-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-[#1A1F3B] p-6 hidden md:block">
+            <h2 class="text-2xl font-bold mb-8">WebShield</h2>
+            <nav class="space-y-4">
+                <a href="{{ route('dashboard') }}" class="block hover:text-pink-400">Dashboard</a>
+                <a href="{{ route('employees.index') }}" class="block hover:text-pink-400">Employés</a>
+                <a href="{{ route('conges.index') }}" class="block hover:text-pink-400">Congés</a>
+                <a href="{{ route('salaire.index') }}" class="block hover:text-pink-400">Salaires</a>
+                <a href="{{ route('projects.index') }}" class="block hover:text-pink-400">Projets</a>
+                <!-- Ajoute d'autres liens ici -->
+            </nav>
+        </aside>
 
-    <!-- Barre supérieure -->
-    <header class="bg-white shadow px-6 py-4 flex items-center justify-between">
-        <h2 class="text-xl font-semibold">Bienvenue, {{ Auth::user()->name }}</h2>
-        <div class="flex items-center space-x-4">
-            <span class="text-gray-600">{{ Auth::user()->email }}</span>
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}" class="w-8 h-8 rounded-full" alt="avatar">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="text-red-600 hover:text-red-800">Déconnexion</button>
-            </form>
-        </div>
-    </header>
-
-    <!-- Contenu de la page -->
-    <main class="p-6">
-        @yield('content')
-    </main>
-
-    @livewireScripts
+        <!-- Main content -->
+        <main class="flex-1 p-4">
+            @yield('content')
+        </main>
+    </div>
 </body>
 </html>
-
