@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar {
+    background: linear-gradient(to right bottom, #AC72A1, #FBD9FA);
+}
+
+.main-content {
+    background: #FFFFFF;
+}
+
+.chart-container {
+    max-width: 400px;
+    margin: 0 auto;
+}

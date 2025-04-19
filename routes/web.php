@@ -8,9 +8,9 @@ use App\Http\Controllers\EmployeController;
 use App\Http\Controllers\UserController; // Ajouté pour le UserController
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CongeController;
+use App\Http\Controllers\Admin\MembreController;
 use App\Http\Controllers\Admin\ProjetController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\SalaireController;
+
 /*
 |---------------------------------------------------------------------------
 | Web Routes
@@ -65,33 +65,12 @@ Route::get('/admin/conges', [AdminController::class, 'showConges'])->name('admin
 Route::patch('/admin/conge/accepter/{id}', [AdminController::class, 'accepterConge'])->name('admin.accepterConge');
 Route::patch('/admin/conge/refuser/{id}', [AdminController::class, 'refuserConge'])->name('admin.refuserConge');
 Route::get('/dashboard/admin', [AdminController::class, 'index'])->name('admin.dashboard');
-// Route pour afficher les demandes de congé de l'employé
+Route::get('/admin/membres', [MembreController::class, 'index'])->name('admin.membres');
 
-Route::middleware(['auth'])->get('/mes-conges', [EmployeController::class, 'mesConges'])->name('employe.mes_conges');
-Route::middleware(['auth', 'role:rh'])->group(function () {
-    Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh.dashboard');
-    Route::get('/conges', [CongesController::class, 'index']);
-});
 Route::get('/admin/projets', [ProjetController::class, 'index'])->name('admin.projets');
-// Route::middleware(['auth', 'admin'])->get('/admin/projets', [ProjetController::class, 'index'])->name('admin.projets');
-
-
-Route::get('/projets', [ProjetController::class, 'index'])->name('admin.projets'); // Liste des projets
-Route::get('/projets/create', [ProjetController::class, 'create'])->name('admin.projets.create'); // Formulaire de création
-Route::post('/projets', [ProjetController::class, 'store'])->name('admin.projets.store'); // Enregistrement d'un projet
-Route::get('/projets/{id}/edit', [ProjetController::class, 'edit'])->name('admin.projets.edit'); // Formulaire de modification
-Route::put('/projets/{id}', [ProjetController::class, 'update'])->name('admin.projets.update'); // Mise à jour du projet
-Route::delete('/projets/{id}', [ProjetController::class, 'destroy'])->name('admin.projets.destroy'); // Suppression du projet
-Route::get('/admin/membres', [App\Http\Controllers\Admin\MembreController::class, 'index'])->name('admin.membres');
-
-
-
-Route::middleware(['auth', 'role:rh'])->group(function () {
-    Route::get('/rh/dashboard', [RhController::class, 'index'])->name('rh.dashboard');
-    Route::get('/conges', [CongesController::class, 'index'])->name('conges.index');
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
-Route::get('/salaires', [SalaireController::class, 'index'])->name('salaire.index');
-Route::resource('projects', ProjectController::class);
-});
+Route::get('/admin/projets/create', [ProjetController::class, 'create'])->name('admin.projets.create');
+Route::delete('/admin/projets/{projet}', [ProjetController::class, 'destroy'])->name('admin.projets.destroy');
+Route::post('/admin/projets', [ProjetController::class, 'store'])->name('admin.projets.store');
+Route::get('/employe/conges', [\App\Http\Controllers\Employe\CongeController::class, 'mesConges'])->name('employe.mes_conges');
+Route::get('/employe/conges', [EmployeController::class, 'mesConges'])->name('employe.mes_conges');
 require __DIR__.'/auth.php';
