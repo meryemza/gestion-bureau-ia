@@ -8,10 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class Projet extends Model
 {
     use HasFactory;
+
+    // Les attributs qui peuvent être assignés en masse
     protected $fillable = [
         'nom',
         'statut',
-        // ajoute ici d'autres colonnes si nécessaire, comme :
-        // 'description', 'date_debut', 'date_fin'
+        'description',
+        'date_debut',
+        'date_fin',
     ];
+
+    /**
+     * Relation Many-to-Many avec les employés (users).
+     * Un projet peut avoir plusieurs employés.
+     */
+    public function employes()
+    {
+        return $this->belongsToMany(User::class, 'projet_user');
+    }
 }
+

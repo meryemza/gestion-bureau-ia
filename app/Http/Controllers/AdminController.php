@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Depense;
 use App\Models\Conge;
 use Carbon\Carbon;
+use App\Models\Projet;
 
 class AdminController extends Controller
 {
@@ -14,6 +15,7 @@ class AdminController extends Controller
      */
     public function index()
     {
+      
         // Statistiques fictives ou issues d'autres modèles
         $stats = [
             'activity_rate' => 20.6,
@@ -49,7 +51,8 @@ class AdminController extends Controller
             'stats' => $stats,
             'labels' => $labels,
             'data' => $data,
-            'conges' => $conges
+            'conges' => $conges,
+            
         ]);
     }
 

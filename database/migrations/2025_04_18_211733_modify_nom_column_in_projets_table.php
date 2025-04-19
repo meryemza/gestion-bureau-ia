@@ -19,7 +19,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('projets', function (Blueprint $table) {
-            $table->string('nom')->nullable(false)->change();
+            $table->dropColumn(['nom', 'description', 'statut', 'date_debut', 'date_fin']);
         });
     }
 };

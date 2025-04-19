@@ -20,6 +20,8 @@
                     <th class="px-4 py-2">Statut</th>
                     <th class="px-4 py-2">Date de début</th>
                     <th class="px-4 py-2">Date de fin</th>
+                    <th class="px-4 py-2">Employés</th>
+                    <th class="px-4 py-2">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,6 +40,32 @@
                         </td>
                         <td class="px-4 py-2">{{ $projet->date_debut }}</td>
                         <td class="px-4 py-2">{{ $projet->date_fin }}</td>
+                        <td class="px-4 py-2">
+                            @if ($projet->employes->isEmpty())
+                                <span class="text-gray-400 italic">Aucun</span>
+                            @else
+                                <ul class="list-disc list-inside space-y-1">
+                                    @foreach ($projet->employes as $employe)
+                                        <li>{{ $employe->name }}</li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </td>
+                        <td class="px-4 py-2 flex space-x-2">
+                            {{-- Bouton Modifier --}}
+                            {{-- <a href="{{ route('admin.projets.edit', $projet->id) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded">
+                                Modifier
+                            </a>--}}
+
+                            {{-- Bouton Supprimer --}}
+                            <form action="{{ route('admin.projets.destroy', $projet->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

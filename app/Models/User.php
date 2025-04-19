@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Conge::class);
     }
+    public function projets()
+{
+    return $this->belongsToMany(Projet::class, 'projet_user');
+}
 }

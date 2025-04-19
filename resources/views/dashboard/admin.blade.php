@@ -9,7 +9,8 @@
             <a href="#" class="block hover:underline">Dépenses</a>
             <a href="#" class="block hover:underline">Services & Tarifs</a>
             <a href="#" class="block hover:underline">Factures</a>
-            <a href="#" class="block hover:underline">Membres</a>
+            <a href="{{ route('admin.membres') }}" class="block hover:underline">Membres</a>
+
             <a href="#" class="block hover:underline">Salaires</a>
             <a href="{{ route('admin.conges') }}" class="block hover:underline">Congés</a>
             <a href="{{ route('admin.projets') }}" class="block hover:underline">Projets</a>
@@ -57,12 +58,15 @@
                 <h3 class="text-xl font-semibold mb-2">Projets actifs</h3>
                 <p class="text-2xl text-[#FBD9FA] font-bold">7</p>
             </div>
+           
         </div>
 
         <!-- Liste des Congés en attente -->
         <div class="mt-10 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
             <h3 class="text-xl font-semibold mb-4">Congés en attente</h3>
-            @if ($conges->isEmpty())
+          
+           @if ($conges->isEmpty())
+           
                 <p class="text-gray-400">Aucun congé en attente pour le moment.</p>
             @else
                 <table class="min-w-full table-auto text-left">
@@ -146,6 +150,3 @@
     });
 </script>
 @endsection
-
-
-
