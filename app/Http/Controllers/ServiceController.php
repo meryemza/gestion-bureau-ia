@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -21,13 +19,17 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'price_ht' => 'required|numeric',
-            'price_ttc' => 'required|numeric',
+            'nom' => 'required|string',
+            'prix_ht' => 'required|numeric',
+            
         ]);
 
-        Service::create($request->all());
-
+        Service::create([
+            'nom' => $request->nom,
+            'description' => $request->description,
+            'prix_ht' => $request->prix_ht,
+            'prix_ttc' => $request->prix_ht * 1.2, // 20% TVA
+        ]);
         return redirect()->route('services.index')->with('success', 'Service ajouté avec succès.');
     }
 
@@ -39,9 +41,8 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         $request->validate([
-            'name' => 'required|string',
-            'price_ht' => 'required|numeric',
-            'price_ttc' => 'required|numeric',
+            'nom' => 'required|string',
+            'prix_ht' => 'required|numeric',
         ]);
 
         $service->update($request->all());
@@ -55,3 +56,9 @@ class ServiceController extends Controller
         return redirect()->route('services.index')->with('success', 'Service supprimé.');
     }
 }
+
+
+
+
+
+
