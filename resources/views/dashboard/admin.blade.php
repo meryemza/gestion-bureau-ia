@@ -7,7 +7,8 @@
         <h2 class="text-3xl font-bold mb-6">Admin</h2>
         <nav class="space-y-5 font-semibold">
             <a href="#" class="block hover:underline">Dépenses</a>
-            <a href="#" class="block hover:underline">Services & Tarifs</a>
+            <a href="{{ route('services.index') }}">Services & Tarifs</a>
+
             <a href="#" class="block hover:underline">Factures</a>
             <a href="{{ route('admin.membres') }}" class="block hover:underline">Membres</a>
 
@@ -24,6 +25,7 @@
             </form>
         </nav>
     </aside>
+            
 
     <!-- Main Content -->
     <main class="flex-1 p-10 overflow-y-auto">

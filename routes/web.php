@@ -73,4 +73,7 @@ Route::delete('/admin/projets/{projet}', [ProjetController::class, 'destroy'])->
 Route::post('/admin/projets', [ProjetController::class, 'store'])->name('admin.projets.store');
 Route::get('/employe/conges', [\App\Http\Controllers\Employe\CongeController::class, 'mesConges'])->name('employe.mes_conges');
 Route::get('/employe/conges', [EmployeController::class, 'mesConges'])->name('employe.mes_conges');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::resource('services', App\Http\Controllers\ServiceController::class);
+});
 require __DIR__.'/auth.php';
