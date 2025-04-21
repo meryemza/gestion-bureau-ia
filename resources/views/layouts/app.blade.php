@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard RH</title>
+    <title>Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles

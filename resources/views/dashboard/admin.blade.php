@@ -16,7 +16,8 @@
             <a href="{{ route('admin.conges') }}" class="block hover:underline">Congés</a>
             <a href="{{ route('admin.projets') }}" class="block hover:underline">Projets</a>
 
-            <a href="#" class="block hover:underline">Clients</a>
+            <a href="{{ route('admin.clients.index') }}" class="block hover:underline">Clients</a>
+
             <a href="#" class="block hover:underline">Statistiques</a>
 
             <form method="POST" action="{{ route('logout') }}" class="pt-4">
