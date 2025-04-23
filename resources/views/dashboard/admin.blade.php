@@ -9,7 +9,8 @@
             <a href="#" class="block hover:underline">Dépenses</a>
             <a href="{{ route('services.index') }}">Services & Tarifs</a>
 
-            <a href="#" class="block hover:underline">Factures</a>
+            <a href="{{ route('factures.index') }}" class="block hover:underline">Factures</a>
+
             <a href="{{ route('admin.membres') }}" class="block hover:underline">Membres</a>
 
             <a href="#" class="block hover:underline">Salaires</a>
@@ -17,8 +18,6 @@
             <a href="{{ route('admin.projets') }}" class="block hover:underline">Projets</a>
 
             <a href="{{ route('admin.clients.index') }}" class="block hover:underline">Clients</a>
-
-            <a href="#" class="block hover:underline">Statistiques</a>
 
             <form method="POST" action="{{ route('logout') }}" class="pt-4">
                 @csrf

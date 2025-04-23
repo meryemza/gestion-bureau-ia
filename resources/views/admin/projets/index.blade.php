@@ -65,6 +65,8 @@
                                     Supprimer
                                 </button>
                             </form>
+                            <!-- Exemple d'un bouton dans la vue du projet -->
+<a href="{{ route('projets.taches.index', $projet->id) }}" class="btn btn-info">Voir les tâches</a>
                         </td>
                     </tr>
                 @endforeach

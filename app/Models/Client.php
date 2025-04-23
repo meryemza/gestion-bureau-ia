@@ -16,5 +16,9 @@ class Client extends Model
 
         // Ajoute d'autres attributs si nécessaire
     ];
+    public function factures() {
+        return $this->hasMany(Facture::class);
+    }
+    
 }
 

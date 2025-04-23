@@ -1,158 +1,151 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="bg-[#070E2A] text-white min-h-screen p-8">
+<div class="bg-[#070E2A] text-white flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col">
+        <h2 class="text-3xl font-bold mb-6">RH Dashboard</h2>
+        <nav class="space-y-5 font-semibold">
+            <a href="#" class="block hover:underline">Tableau de bord</a>
+            <a href="#" class="block hover:underline">Absences</a>
+            <a href="#" class="block hover:underline">Contrat</a>
+            <a href="#" class="block hover:underline">Salaires</a>
+            <a href="#" class="block hover:underline">Recrutements</a>
 
-    <!-- Titre -->
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-3xl font-bold">Dashboard RH</h1>
-        <p class="text-sm text-gray-300">Dernière mise à jour : {{ now()->format('d M Y') }}</p>
-    </div>
+            <form method="POST" action="{{ route('logout') }}" class="pt-4">
+                @csrf
+                <button type="submit" class="block text-left text-red-600 hover:underline">Déconnexion</button>
+            </form>
+        </nav>
+    </aside>
 
-    <!-- KPIs -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <x-kpi title="Total Salary (YTD)" :value="$totalSalary" change="-2.4%" />
-        <x-kpi title="Average Salary" :value="$averageSalary" change="-1.6%" />
-        <x-kpi title="Turnover Rate" :value="$turnoverRate" change="+0.8%" />
-        <x-kpi title="Absenteeism Rate" :value="$absenteeism" change="+22.8%" />
-        <x-kpi title="Average Age" :value="$avgAge" />
-        <x-kpi title="Permanent Rate" :value="$permanentRate" />
-    </div>
-
-    <!-- Headcount + Hired/Left -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg text-center">
-            <h3 class="text-xl font-semibold mb-2">Headcount</h3>
-            <p class="text-3xl font-bold text-[#FBD9FA]">{{ $headcount }}</p>
-            <canvas id="headcountChart" class="mt-4" height="150"></canvas>
+    
+    <!-- Main Content -->
+    <main class="flex-1 p-10 overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Bienvenue, {{ Auth::user()->name }}</h1>
+            <p class="text-sm text-gray-300">Dernière connexion : {{ now()->format('d M Y à H\hi') }}</p>
+        </div>
+        <!-- KPIs -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-7 mb-10">
+            <x-kpi title=" Total des Salaires (DH)" value="90,000" />
+            <x-kpi title=" Total des Congés ce mois " value="10" />
+            <x-kpi title="Contrats Actifs" value="8" />
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg text-center">
-                <h4 class="text-lg text-gray-300">Hired</h4>
-                <p class="text-2xl font-bold text-[#FBD9FA]">{{ $hired }}</p>
+        <!-- Graphiques (vides ou avec données fixes) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Évolution des Absences</h3>
+                <canvas id="absenceChart" height="200"></canvas>
             </div>
-            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg text-center">
-                <h4 class="text-lg text-gray-300">Left</h4>
-                <p class="text-2xl font-bold text-[#FBD9FA]">{{ $left }}</p>
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Évolution des Salaires</h3>
+                <canvas id="salaryChart" height="200"></canvas>
             </div>
         </div>
-    </div>
 
-    <!-- Graphiques -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-            <h3 class="text-xl font-semibold mb-4">Employees by Gender</h3>
-            <canvas id="genderChart" height="200"></canvas>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Répartition Congés</h3>
+                <canvas id="leaveChart" height="200"></canvas>
+            </div>
+            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Types de Contrats</h3>
+                <canvas id="contractChart" height="200"></canvas>
+            </div>
         </div>
-        <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-            <h3 class="text-xl font-semibold mb-4">Total Salary (Mensuel)</h3>
-            <canvas id="salaryChart" height="200"></canvas>
+
+        <div class="mt-6 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+            <h3 class="text-xl font-semibold mb-4">Recrutements par Mois</h3>
+            <canvas id="recruitmentChart" height="200"></canvas>
         </div>
-    </div>
-
-    <div class="mt-6 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-        <h3 class="text-xl font-semibold mb-4">Hired vs Left</h3>
-        <canvas id="hiredLeftChart" height="200"></canvas>
-    </div>
-
+    </main>
 </div>
 
-<!-- Chart.js -->
+<!-- Chart.js avec données statiques -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Headcount Donut
-    new Chart(document.getElementById('headcountChart'), {
-        type: 'doughnut',
+    const months = ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin'];
+
+    new Chart(document.getElementById('absenceChart'), {
+        type: 'line',
         data: {
-            labels: ['Hommes', 'Femmes'],
+            labels: months,
             datasets: [{
-                data: @json($headcountData),
-                backgroundColor: ['#AC72A1', '#FBD9FA']
+                label: 'Absences',
+                data: [2, 1, 3, 2, 1, 3],
+                borderColor: '#AC72A1',
+                backgroundColor: 'rgba(172, 114, 161, 0.2)',
+                fill: true
             }]
         },
         options: {
-            cutout: '65%',
-            plugins: {
-                legend: { labels: { color: '#fff' }, position: 'bottom' }
-            }
-        }
-    });
-
-    // Gender bar chart
-    new Chart(document.getElementById('genderChart'), {
-        type: 'bar',
-        data: {
-            labels: @json($months),
-            datasets: [
-                {
-                    label: 'Hommes',
-                    data: @json($genderM),
-                    backgroundColor: '#AC72A1'
-                },
-                {
-                    label: 'Femmes',
-                    data: @json($genderF),
-                    backgroundColor: '#FBD9FA'
-                }
-            ]
-        },
-        options: {
-            scales: {
-                x: { ticks: { color: '#fff' } },
-                y: { ticks: { color: '#fff' }, beginAtZero: true }
-            },
+            scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
             plugins: { legend: { labels: { color: '#fff' } } }
         }
     });
 
-    // Salary Bar
     new Chart(document.getElementById('salaryChart'), {
         type: 'bar',
         data: {
-            labels: @json($months),
+            labels: months,
             datasets: [{
-                label: 'Salaire total',
-                data: @json($salaryPerMonth),
+                label: 'Salaires',
+                data: [15000, 16000, 17000, 16000, 18000, 19000],
                 backgroundColor: '#FBD9FA'
             }]
         },
         options: {
-            scales: {
-                x: { ticks: { color: '#fff' } },
-                y: { ticks: { color: '#fff' }, beginAtZero: true }
-            },
+            scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
             plugins: { legend: { labels: { color: '#fff' } } }
         }
     });
 
-    // Hired vs Left
-    new Chart(document.getElementById('hiredLeftChart'), {
+    new Chart(document.getElementById('leaveChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Restants', 'Utilisés'],
+            datasets: [{
+                label: 'Congés',
+                data: [35, 15],
+                backgroundColor: ['#AC72A1', '#FBD9FA']
+            }]
+        },
+        options: { plugins: { legend: { labels: { color: '#fff' } } } }
+    });
+
+    new Chart(document.getElementById('contractChart'), {
         type: 'bar',
         data: {
-            labels: @json($months),
-            datasets: [
-                {
-                    label: 'Hired',
-                    data: @json($hiredPerMonth),
-                    backgroundColor: '#AC72A1'
-                },
-                {
-                    label: 'Left',
-                    data: @json($leftPerMonth),
-                    backgroundColor: '#FBD9FA'
-                }
-            ]
+            labels: ['CDI', 'CDD', 'Stage'],
+            datasets: [{
+                label: 'Contrats',
+                data: [5, 2, 1],
+                backgroundColor: '#AC72A1'
+            }]
         },
         options: {
-            responsive: true,
-            plugins: {
-                legend: { labels: { color: '#fff' } }
-            },
-            scales: {
-                x: { ticks: { color: '#fff' } },
-                y: { ticks: { color: '#fff' }, beginAtZero: true }
-            }
+            scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
+            plugins: { legend: { labels: { color: '#fff' } } }
+        }
+    });
+
+    new Chart(document.getElementById('recruitmentChart'), {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Recrutements',
+                data: [0, 1, 0, 2, 0, 1],
+                borderColor: '#FBD9FA',
+                backgroundColor: 'rgba(251, 217, 250, 0.2)',
+                fill: true
+            }]
+        },
+        options: {
+            scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
+            plugins: { legend: { labels: { color: '#fff' } } }
         }
     });
 </script>

@@ -26,5 +26,9 @@ class Projet extends Model
     {
         return $this->belongsToMany(User::class, 'projet_user');
     }
+    public function taches()
+{
+    return $this->hasMany(Tache::class);
+}
 }
 
