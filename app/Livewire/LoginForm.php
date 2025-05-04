@@ -36,4 +36,9 @@ class LoginForm extends Component
     {
         return view('livewire.login-form');
     }
+    public function authenticated(Request $request, $user)
+{
+    $user->last_login_at = now();
+    $user->save();
+}
 }

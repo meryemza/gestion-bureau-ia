@@ -18,4 +18,3 @@ class DashboardStats extends Component
         return view('livewire.dashboard-stats');
     }
 }
-

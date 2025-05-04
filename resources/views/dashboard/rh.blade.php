@@ -2,23 +2,6 @@
 
 @section('content')
 <div class="bg-[#070E2A] text-white flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col">
-        <h2 class="text-3xl font-bold mb-6">RH Dashboard</h2>
-        <nav class="space-y-5 font-semibold">
-            <a href="#" class="block hover:underline">Tableau de bord</a>
-            <a href="#" class="block hover:underline">Absences</a>
-            <a href="#" class="block hover:underline">Contrat</a>
-            <a href="#" class="block hover:underline">Salaires</a>
-            <a href="#" class="block hover:underline">Recrutements</a>
-
-            <form method="POST" action="{{ route('logout') }}" class="pt-4">
-                @csrf
-                <button type="submit" class="block text-left text-red-600 hover:underline">Déconnexion</button>
-            </form>
-        </nav>
-    </aside>
-
     
     <!-- Main Content -->
     <main class="flex-1 p-10 overflow-y-auto">

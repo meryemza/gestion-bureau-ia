@@ -1,19 +1,22 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Contrat extends Model
+class Departement extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'employe',
-        'type',
-        'date_debut',
-        'date_fin',
-        'statut',
+        'name',
+        // autres champs
     ];
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }
