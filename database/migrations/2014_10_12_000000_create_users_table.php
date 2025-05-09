@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->string('role'); // Retirer la valeur par défaut ici
+            $table->string('role');
+            $table->string('google2fa_secret')->nullable(); // Retirer la valeur par défaut ici
         });
     }
 

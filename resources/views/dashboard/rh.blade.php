@@ -39,9 +39,11 @@
             </div>
         </div>
 
-        <div class="mt-6 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-            <h3 class="text-xl font-semibold mb-4">Recrutements par Mois</h3>
-            <canvas id="recruitmentChart" height="200"></canvas>
+
+        <!-- Graphique des Recrutements -->
+        <div class="mt-10 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+            <h3 class="text-xl font-semibold mb-4">Évolution des Recrutements</h3>
+            <canvas id="recrutementChart" height="100"></canvas>
         </div>
     </main>
 </div>
@@ -49,15 +51,23 @@
 <!-- Chart.js avec données statiques -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const months = ['Jan', 'Fév', 'Mars', 'Avr', 'Mai', 'Juin'];
+    // Récupérer les données PHP dans JS
+    const months = @json($months);
+    const absences = @json($absencesByMonth);
+    const salaires = @json($salaireByMonth);
+    const conges = [@json($congesRestants), @json($congesUtilises)];
+    const typesContrats = @json(array_values($typesContrats));
+    const recrutements = @json($recrutementsByMonth);
+    const congesByMonth = @json($congesByMonth);
 
+    // Absences
     new Chart(document.getElementById('absenceChart'), {
         type: 'line',
         data: {
             labels: months,
             datasets: [{
                 label: 'Absences',
-                data: [2, 1, 3, 2, 1, 3],
+                data: absences,
                 borderColor: '#AC72A1',
                 backgroundColor: 'rgba(172, 114, 161, 0.2)',
                 fill: true
@@ -69,13 +79,14 @@
         }
     });
 
+    // Salaires
     new Chart(document.getElementById('salaryChart'), {
         type: 'bar',
         data: {
             labels: months,
             datasets: [{
                 label: 'Salaires',
-                data: [15000, 16000, 17000, 16000, 18000, 19000],
+                data: salaires,
                 backgroundColor: '#FBD9FA'
             }]
         },
@@ -85,26 +96,14 @@
         }
     });
 
+    // Répartition Congés
     new Chart(document.getElementById('leaveChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Restants', 'Utilisés'],
-            datasets: [{
-                label: 'Congés',
-                data: [35, 15],
-                backgroundColor: ['#AC72A1', '#FBD9FA']
-            }]
-        },
-        options: { plugins: { legend: { labels: { color: '#fff' } } } }
-    });
-
-    new Chart(document.getElementById('contractChart'), {
         type: 'bar',
         data: {
-            labels: ['CDI', 'CDD', 'Stage'],
+            labels: months,
             datasets: [{
-                label: 'Contrats',
-                data: [5, 2, 1],
+                label: 'Congés acceptés',
+                data: congesByMonth,
                 backgroundColor: '#AC72A1'
             }]
         },
@@ -114,13 +113,31 @@
         }
     });
 
-    new Chart(document.getElementById('recruitmentChart'), {
+    // Types de Contrats
+    new Chart(document.getElementById('contractChart'), {
+        type: 'bar',
+        data: {
+            labels: ['CDI', 'CDD', 'Stage'],
+            datasets: [{
+                label: 'Contrats',
+                data: typesContrats,
+                backgroundColor: '#AC72A1'
+            }]
+        },
+        options: {
+            scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
+            plugins: { legend: { labels: { color: '#fff' } } }
+        }
+    });
+
+    // Graphe Recrutements par Mois
+   new Chart(document.getElementById('recruitmentChart'), {
         type: 'line',
         data: {
             labels: months,
             datasets: [{
                 label: 'Recrutements',
-                data: [0, 1, 0, 2, 0, 1],
+                data: recrutements,
                 borderColor: '#FBD9FA',
                 backgroundColor: 'rgba(251, 217, 250, 0.2)',
                 fill: true
@@ -129,6 +146,39 @@
         options: {
             scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } },
             plugins: { legend: { labels: { color: '#fff' } } }
+        }
+    });
+
+    const recrutementCtx = document.getElementById('recrutementChart').getContext('2d');
+    const recrutementChart = new Chart(recrutementCtx, {
+        type: 'line',
+        data: {
+            labels: @json($recrutementLabels),
+            datasets: [{
+                label: 'Recrutements',
+                data: @json($recrutementData),
+                fill: true,
+                backgroundColor: 'rgba(172, 114, 161, 0.2)',
+                borderColor: '#AC72A1',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#fff' },
+                    grid: { color: 'rgba(255,255,255,0.1)' }
+                },
+                x: {
+                    ticks: { color: '#fff' },
+                    grid: { color: 'rgba(255,255,255,0.1)' }
+                }
+            },
+            plugins: {
+                legend: { labels: { color: '#fff' } }
+            }
         }
     });
 </script>

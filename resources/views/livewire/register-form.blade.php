@@ -34,6 +34,7 @@
     <option value="rh" class="text-black">RH</option>
     <option value="comptable" class="text-black">Comptable</option>
     <option value="employe" class="text-black">Employé</option>
+    <option value="auditeur" class="text-black">Auditeur de Sécurité</option>
 </select>
 
                     @error('role') <span class="text-red-400 text-sm">{{ $message }}</span> @enderror

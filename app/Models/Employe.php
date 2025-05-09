@@ -15,7 +15,7 @@ class Employe extends Model
 
     protected $fillable = [
         'user_id',       // ID de l'utilisateur associé
-        'nom',           // Nom direct si besoin
+        'name',           // Nom direct si besoin
         'salary',        // Salaire
         'department_id', // ID du département (ou service)
     ];
@@ -40,5 +40,10 @@ class Employe extends Model
     public function service()
 {
     return $this->belongsTo(Service::class);
+}
+
+public function salaires()
+{
+    return $this->hasMany(\App\Models\Salaire::class, 'employe_id');
 }
 }

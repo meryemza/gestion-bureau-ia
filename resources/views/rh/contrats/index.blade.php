@@ -50,7 +50,7 @@
                                 </button>
                             </form>
 
-                            <a href="{{ route('rh.contrats.pdf', $contrat->id) }}" class="text-purple-400 hover:underline">PDF</a>
+                            <a href="{{ route('rh.contrats.pdf', $contrat->id) }}" target="_blank" class="text-blue-500 underline">PDF</a>
 
                         </td>
                     </tr>

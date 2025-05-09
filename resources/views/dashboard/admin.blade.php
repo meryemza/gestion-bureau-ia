@@ -1,30 +1,10 @@
+{{-- Debug temporaire --}}
+{{-- @php dd($depensesDuMois); @endphp --}}
 @extends('layouts.app')
 
 @section('content')
 <div class="bg-[#070E2A] text-white flex min-h-screen">
-    <!-- Sidebar -->
-    <aside class="w-64 bg-gradient-to-br from-[#AC72A1] to-[#FBD9FA] text-[#070E2A] p-6 flex flex-col">
-        <h2 class="text-3xl font-bold mb-6">Admin</h2>
-        <nav class="space-y-5 font-semibold">
-            <a href="#" class="block hover:underline">Dépenses</a>
-            <a href="{{ route('services.index') }}">Services & Tarifs</a>
-
-            <a href="{{ route('factures.index') }}" class="block hover:underline">Factures</a>
-
-            <a href="{{ route('admin.membres') }}" class="block hover:underline">Membres</a>
-
-            <a href="#" class="block hover:underline">Salaires</a>
-            <a href="{{ route('admin.conges') }}" class="block hover:underline">Congés</a>
-            <a href="{{ route('admin.projets') }}" class="block hover:underline">Projets</a>
-
-            <a href="{{ route('admin.clients.index') }}" class="block hover:underline">Clients</a>
-
-            <form method="POST" action="{{ route('logout') }}" class="pt-4">
-                @csrf
-                <button type="submit" class="block text-left text-red-600 hover:underline">Déconnexion</button>
-            </form>
-        </nav>
-    </aside>
+    
             
 
     <!-- Main Content -->
@@ -46,28 +26,48 @@
             </div>
         @endif
 
+
+        @if ($alerteDepense)
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 rounded">
+        <p class="font-semibold">{{ $alerteDepense }}</p>
+    </div>
+@endif
+
         <!-- Statistiques -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-semibold mb-2">Revenus ce mois</h3>
+        <p class="text-2xl text-[#FBD9FA] font-bold">
+            {{ number_format($revenuMois, 2, ',', ' ') }} DH
+        </p>
+    </div>
             <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-                <h3 class="text-xl font-semibold mb-2">Revenus ce mois</h3>
-                <p class="text-2xl text-[#FBD9FA] font-bold">12,500 DH</p>
-            </div>
-            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-                <h3 class="text-xl font-semibold mb-2">Dépenses ce mois</h3>
-                <p class="text-2xl text-[#FBD9FA] font-bold">5,200 DH</p>
-            </div>
-            <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
-                <h3 class="text-xl font-semibold mb-2">Projets actifs</h3>
-                <p class="text-2xl text-[#FBD9FA] font-bold">7</p>
-            </div>
+    <h3 class="text-xl font-semibold mb-2">Dépenses ce mois</h3>
+    <p class="text-2xl text-[#FBD9FA] font-bold">
+        {{ number_format($depensesDuMois, 2) }} DH
+    </p>
+</div>
+<div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-semibold mb-2">Projets actifs</h3>
+        <p class="text-2xl text-[#FBD9FA] font-bold">{{ $projetsActifs }}</p>
+    </div>
            
+    <div class="bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
+    <h3 class="text-xl font-semibold mb-2">Audit de sécurité</h3>
+    <p class="text-2xl text-[#FBD9FA] font-bold">
+        <a href="{{ route('admin.audit.index') }}" class="inline-block px-6 py-2 bg-[#AC72A1] text-white rounded-lg shadow-md hover:bg-[#8e5995] transition duration-300 ease-in-out">
+            Lancer l'Audit
+        </a>
+    </p>
+</div>
         </div>
 
         <!-- Liste des Congés en attente -->
         <div class="mt-10 bg-[#1A1F3B] p-6 rounded-2xl shadow-lg">
             <h3 class="text-xl font-semibold mb-4">Congés en attente</h3>
-          
-           @if ($conges->isEmpty())
+
+            @if ($conges->isEmpty())
            
                 <p class="text-gray-400">Aucun congé en attente pour le moment.</p>
             @else

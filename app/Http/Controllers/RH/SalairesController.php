@@ -16,26 +16,27 @@ class SalairesController extends Controller
     public function index()
     {
         // Récupérer tous les salaires avec relation employé
-    $salaires = Salaire::with('employee')->latest()->get();
+        $salaires = Salaire::with('employe')->get();
 
-    // Nombre de salaires versés / non versés
-    $paidCount = Salaire::where('status', 'Versé')->count();
-    $unpaidCount = Salaire::where('status', 'Non versé')->count();
+        // Nombre de salaires versés / non versés
+        $paidCount = Salaire::where('status', 'Versé')->count();
+        $unpaidCount = Salaire::where('status', 'Non versé')->count();
 
-    // Mois de l'année (format Janvier, Février, etc.)
-    $months = collect(range(1, 12))->map(function ($month) {
-        return Carbon::create()->month($month)->locale('fr_FR')->isoFormat('MMMM');
-    });
+        // Mois de l'année (format Janvier, Février, etc.)
+        $months = collect(range(1, 12))->map(function ($month) {
+            return Carbon::create()->month($month)->locale('fr_FR')->isoFormat('MMMM');
+        });
 
-    // Total des salaires versés par mois
-    $salaireData = [];
-    foreach (range(1, 12) as $month) {
-        $total = Salaire::whereMonth('created_at', $month)->sum('montant');
-        $salaireData[] = $total;
+        // Total des salaires versés par mois
+        $salaireData = [];
+        foreach (range(1, 12) as $month) {
+            $total = Salaire::whereMonth('created_at', $month)->sum('montant');
+            $salaireData[] = $total;
+        }
+
+        return view('rh.salaires.index', compact('salaires', 'paidCount', 'unpaidCount', 'months', 'salaireData'));
     }
 
-    return view('rh.salaires.index', compact('salaires', 'paidCount', 'unpaidCount', 'months', 'salaireData'));
-}
     public function create()
     {
         $employes = User::all();

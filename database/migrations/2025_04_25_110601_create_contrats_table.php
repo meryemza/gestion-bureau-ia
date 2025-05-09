@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('date_debut');
             $table->date('date_fin')->nullable();
             $table->enum('statut', ['Actif', 'En cours', 'Terminé']);
+            $table->foreignId('employe_id')->constrained('employees')->onDelete('cascade');
             $table->timestamps();
         });
     }

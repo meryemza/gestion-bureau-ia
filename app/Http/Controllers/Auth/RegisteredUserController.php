@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'role' => ['required', 'string', 'in:admin,rh,comptable,employe'],
+            'role' => ['required', 'string', 'in:admin,rh,comptable,employe,auditeur'],
         ]);
     
         // ✅ Création de l'utilisateur
@@ -48,7 +48,15 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
-    
+        if ($user->role === 'employe') {
+            Employe::create([
+                'user_id' => $user->id,
+                // autres colonnes comme poste, téléphone, etc.
+            ]);
+        }
+
+        event(new UserCreated($user));
+       
         event(new Registered($user));
     
         Auth::login($user);
@@ -63,8 +71,8 @@ class RegisteredUserController extends Controller
             'admin' => '/admin/dashboard',
             'rh' => '/rh/dashboard',
             'comptable' => '/comptable/dashboard',
-            'employe' => '/employe/dashboard',
-            default => '/',
+            'auditeur' => redirect()->route('auditeur.dashboard'),
+            default => '/employe/dashboard',
         };
     }
     

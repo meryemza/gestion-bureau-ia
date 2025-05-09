@@ -24,17 +24,17 @@
             <tbody>
                 @foreach($salaires as $salaire)
                     <tr class="border-b border-gray-700">
-                        <td class="py-4 px-6">{{ $salaire->employe->name ?? 'N/A' }}</td>
-                        <td class="py-4 px-6">{{ $salaire->montant ?? '0' }} €</td>
-                        <td class="py-4 px-6">{{ $salaire->variable ?? '0' }} €</td>
+                        <td class="py-4 px-6">{{ $salaire->employe->nom ?? 'N/A' }}</td>
+                        <td class="py-4 px-6">{{ $salaire->salaire_base ?? 0 }} €</td>
+                        <td class="py-4 px-6">{{ $salaire->prime ?? 0 }} €</td>
                         <td class="py-4 px-6">
-                            @if($salaire->status == 'Versé')
+                            @if($salaire->statut === 'versé')
                                 <span class="bg-green-500 text-white px-2 py-1 rounded">Versé</span>
                             @else
-                                <span class="bg-red-500 text-white px-2 py-1 rounded">Non versé</span>
+                                <span class="bg-yellow-500 text-white px-2 py-1 rounded">En attente</span>
                             @endif
                         </td>
-                        <td class="py-4 px-6">{{ $salaire->created_at->format('d/m/Y') }}</td>
+                        <td class="py-4 px-6">{{ \Carbon\Carbon::parse($salaire->date_paiement)->format('d/m/Y') }}</td>
                     </tr>
                 @endforeach
             </tbody>

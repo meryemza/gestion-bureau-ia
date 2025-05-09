@@ -15,5 +15,11 @@ class Contrat extends Model
         'date_debut',
         'date_fin',
         'statut',
+        'salaire',
     ];
+
+    public function employe()
+    {
+        return $this->belongsTo(\App\Models\Employe::class, 'employe_id');
+    }
 }

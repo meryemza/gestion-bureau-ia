@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RH;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contrat;
+use App\Models\Employe;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf; // Assure-toi que barryvdh/laravel-dompdf est installé
 use Carbon\Carbon;
@@ -12,14 +13,15 @@ class ContratController extends Controller
     // Liste des contrats
     public function index()
     {
-        $contrats = Contrat::orderBy('created_at', 'desc')->get();
+        $contrats = Contrat::with('employe')->orderBy('created_at', 'desc')->get();
         return view('rh.contrats.index', compact('contrats'));
     }
 
     // Formulaire de création
     public function create()
     {
-        return view('rh.contrats.create');
+        $employes = Employe::all();
+        return view('rh.contrats.create', compact('employes'));
     }
 
     // Enregistrer un nouveau contrat
@@ -56,6 +58,7 @@ class ContratController extends Controller
             'niveau_scolaire' => 'nullable|string|max:255',
             'nombre_eleves' => 'nullable|integer',
             'dates_heures_seances' => 'nullable|string|max:500',
+            'salaire' => 'required|numeric|min:0',
         ]);
          
         $date_debut = Carbon::parse($request->date_debut)->format('Y-m-d');
@@ -94,6 +97,7 @@ class ContratController extends Controller
             'niveau_scolaire' => $request->niveau_scolaire,
             'nombre_eleves' => $request->nombre_eleves,
             'dates_heures_seances' => $request->dates_heures_seances,
+            'salaire' => $request->salaire,
         ]);
     
         // Sauvegarder le contrat dans la base de données
@@ -106,10 +110,11 @@ class ContratController extends Controller
     public function edit($id)
     {
         $contrat = Contrat::findOrFail($id);
-        return view('rh.contrats.edit', compact('contrat'));
+        $employes = Employe::all();
+        return view('rh.contrats.edit', compact('contrat', 'employes'));
     }
 
-    // Mise à jour d’un contrat
+    // Mise à jour d'un contrat
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -134,29 +139,19 @@ class ContratController extends Controller
     }
 
     // Affichage PDF
-
-/*public function generatePdf($id)
-{
-    $contrat = Contrat::findOrFail($id);
-    $pdf = Pdf::loadView('rh.contrats.pdf', compact('contrat'));
-    return $pdf->stream("contrat_{$contrat->id}.pdf");
-}
-
-    public function showPdf($id)
-    {
-        $contrat = Contrat::findOrFail($id);
-        $pdf = PDF::loadView('rh.contrats.pdf', compact('contrat'));
-        return $pdf->stream("Contrat_{$contrat->id}.pdf");
-    }*/
     public function generatePdf($id)
-{
-    // Récupérer le contrat
-    $contrat = Contrat::with('employe', 'employeur')->findOrFail($id);
+    {
+        $contrat = Contrat::with('employe')->findOrFail($id);
 
-    // Générer le PDF à partir de la vue Blade
-    $pdf = Pdf::loadView('contrats.pdf', compact('contrat'));
+        // Choisis la vue selon le type de contrat si besoin
+        $view = match(strtolower($contrat->type)) {
+            'cdi' => 'rh.contrats.pdf_cdi',
+            'cdd' => 'rh.contrats.pdf_cdd',
+            'stage' => 'rh.contrats.pdf_stage',
+            default => 'rh.contrats.pdf_default',
+        };
 
-    // Télécharger le PDF
-    return $pdf->download('contrat_' . $contrat->employe->nom . '.pdf');
-}
+        $pdf = Pdf::loadView($view, compact('contrat'));
+        return $pdf->stream("contrat_{$contrat->id}.pdf");
+    }
 }

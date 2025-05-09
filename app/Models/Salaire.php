@@ -11,9 +11,9 @@ class Salaire extends Model
         'employe_id', 'salaire_base', 'prime', 'deduction', 'salaire_net', 'date_paiement', 'mois'
     ];
 
-    public function employee()
+    public function employe()
     {
-        return $this->belongsTo(Employe::class, 'employe_id');
+        return $this->belongsTo(\App\Models\Employe::class, 'employe_id');
     }
 
 }
