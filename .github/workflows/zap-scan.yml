@@ -1,0 +1,72 @@
+name: ZAP Security Scan
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  zap-scan:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: laravel
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, bcmath, pdo, pdo_mysql
+        ini-values: post_max_size=256M, upload_max_filesize=256M
+
+    - name: Install Composer dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist
+
+    - name: Copy .env and generate key
+      run: |
+        cp .env.example .env
+        php artisan key:generate
+
+    - name: Run migrations
+      run: php artisan migrate --force
+      env:
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: laravel
+        DB_USERNAME: root
+        DB_PASSWORD: root
+
+    - name: Start Laravel server
+      run: php artisan serve --host=0.0.0.0 --port=8000 &
+    
+    - name: Wait for server
+      run: |
+        echo "Waiting for Laravel to boot..."
+        sleep 10
+
+    - name: Run OWASP ZAP Baseline Scan
+      uses: zaproxy/action-baseline@v0.9.0
+      with:
+        target: 'http://localhost:8000'
+        cmd_options: '-r zap_report.html'
+
+    - name: Upload ZAP report
+      uses: actions/upload-artifact@v3
+      with:
+        name: ZAP-Security-Report
+        path: zap_report.html
